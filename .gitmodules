@@ -1,0 +1,3 @@
+[submodule "mdview"]
+	path = mdview
+	url = https://github.com/mdview2026/mdview.git
