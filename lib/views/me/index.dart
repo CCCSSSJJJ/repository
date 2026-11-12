@@ -199,22 +199,25 @@ class _UserAndSettingsState extends State<UserAndSettings> {
       ),
       body: isLoading
           ? buildLoader(isLoading)
-          : Column(
-              // 从listview改为column后需要纵向主轴为stretch切换头像等图标才不会跑偏
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                /// 用户基本信息展示区域(固定高度)
-                ..._buildBaseUserInfoArea(userInfo),
+          : Padding(
+              padding: EdgeInsets.only(bottom: 72.h),
+              child: Column(
+                // 从listview改为column后需要纵向主轴为stretch切换头像等图标才不会跑偏
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  /// 用户基本信息展示区域(固定高度)
+                  ..._buildBaseUserInfoArea(userInfo),
 
-                /// 用户基本信息和体重趋势按钮
-                Expanded(child: _buildInfoAndWeightChangeRow()),
+                  /// 用户基本信息和体重趋势按钮
+                  Expanded(child: _buildInfoAndWeightChangeRow()),
 
-                /// 摄入目标和运动设置按钮
-                Expanded(child: _buildIntakeGoalAndRestTimeRow()),
+                  /// 摄入目标和运动设置按钮
+                  Expanded(child: _buildIntakeGoalAndRestTimeRow()),
 
-                /// 备份还原和更多设置按钮
-                Expanded(child: _buildBakAndRestoreAndMoreSettingRow()),
-              ],
+                  /// 备份还原和更多设置按钮
+                  Expanded(child: _buildBakAndRestoreAndMoreSettingRow()),
+                ],
+              ),
             ),
     );
   }
@@ -533,23 +536,36 @@ class NewCusSettingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 这里套一层容器宽高过小会生效不好看，但过大会在使用处的expanded限制住
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(10.sp),
-      child: Card(
-        elevation: 2.sp,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.sp),
-        ),
-        child: Center(
-          child: ListTile(
-            leading: Icon(leadingIcon),
-            title: Text(
-              title,
-              style: TextStyle(
-                fontSize: CusFontSizes.pageSubTitle,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor,
+    final primary = Theme.of(context).colorScheme.primary;
+    return Padding(
+      padding: EdgeInsets.all(6.sp),
+      child: Material(
+        color: Theme.of(context).cardColor,
+        elevation: 0,
+        borderRadius: BorderRadius.circular(16.r),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(16.r),
+          child: Ink(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16.r),
+              border: Border.all(color: primary.withValues(alpha: 0.12)),
+            ),
+            child: Center(
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: primary.withValues(alpha: 0.12),
+                  foregroundColor: primary,
+                  child: Icon(leadingIcon),
+                ),
+                title: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: CusFontSizes.pageSubTitle,
+                    fontWeight: FontWeight.w700,
+                    color: primary,
+                  ),
+                ),
               ),
             ),
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../core/widgets/cus_cards.dart';
 import '../../core/constants/constants.dart';
@@ -35,42 +36,45 @@ class _TrainingState extends State<Training> {
       // 避免搜索时弹出键盘，让底部的minibar位置移动到tab顶部导致溢出的问题
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text(CusAL.of(context).training)),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: CusCoverCard(
-              targetPage: const TrainingReports(),
-              title: CusAL.of(context).trainingReports,
-              subtitle: CusAL.of(context).trainingReportsSubtitle,
-              imageUrl: reportImageUrl,
+      body: Padding(
+        padding: EdgeInsets.fromLTRB(12.w, 8.h, 12.w, 76.h),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: CusCoverCard(
+                targetPage: const TrainingReports(),
+                title: CusAL.of(context).trainingReports,
+                subtitle: CusAL.of(context).trainingReportsSubtitle,
+                imageUrl: reportImageUrl,
+              ),
             ),
-          ),
-          Expanded(
-            child: CusCoverCard(
-              targetPage: const TrainingExercise(),
-              title: CusAL.of(context).exerciseLabel,
-              subtitle: CusAL.of(context).exerciseSubtitle,
-              imageUrl: workoutWomanImageUrl,
+            Expanded(
+              child: CusCoverCard(
+                targetPage: const TrainingExercise(),
+                title: CusAL.of(context).exerciseLabel,
+                subtitle: CusAL.of(context).exerciseSubtitle,
+                imageUrl: workoutWomanImageUrl,
+              ),
             ),
-          ),
-          Expanded(
-            child: CusCoverCard(
-              targetPage: const TrainingWorkouts(),
-              title: CusAL.of(context).workout,
-              subtitle: CusAL.of(context).workoutSubtitle,
-              imageUrl: workoutManImageUrl,
+            Expanded(
+              child: CusCoverCard(
+                targetPage: const TrainingWorkouts(),
+                title: CusAL.of(context).workout,
+                subtitle: CusAL.of(context).workoutSubtitle,
+                imageUrl: workoutManImageUrl,
+              ),
             ),
-          ),
-          Expanded(
-            child: CusCoverCard(
-              targetPage: const TrainingPlans(),
-              title: CusAL.of(context).plan,
-              subtitle: CusAL.of(context).planSubtitle,
-              imageUrl: workoutCalendarImageUrl,
+            Expanded(
+              child: CusCoverCard(
+                targetPage: const TrainingPlans(),
+                title: CusAL.of(context).plan,
+                subtitle: CusAL.of(context).planSubtitle,
+                imageUrl: workoutCalendarImageUrl,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

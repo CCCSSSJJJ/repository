@@ -73,29 +73,9 @@ class _FreeFitnessAppState extends State<FreeFitnessApp> {
             //   ),
             // ),
 
-            // 默认使用浅色主题，预设一个深色主题使用的预设值
-            // 跟随系统的默认深色是一个material主题
-            darkTheme: FlexThemeData.dark(scheme: FlexScheme.material),
-
-            /// 根据系统设置使用深色或浅色主题(当有完善的深色模式之后再启用)
-            /// 默认的主题(即theme:null)不是很好看，就只要不是暗色都浅色主题，
-            /// 跟随系统的浅色和深色和手动选择的一样
-            theme: box.read('mode') == 'system'
-                // 跟随系统的默认浅色是一个绿色主题
-                ? FlexThemeData.light(
-                    scheme: FlexScheme.greenM3,
-                    // 2024-11-11 flutter更新到3.24.4、对应插件更新到最新版本时，不添加这个为false效果和之前不一样了
-                    useMaterial3: false,
-                  )
-                : box.read('mode') == 'dark'
-                ? FlexThemeData.dark(
-                    scheme: FlexScheme.mandyRed,
-                    useMaterial3: false,
-                  )
-                : FlexThemeData.light(
-                    scheme: FlexScheme.aquaBlue,
-                    useMaterial3: false,
-                  ),
+            // 浅色是陶土色，深色是同一套颜色的夜间版。手动深浅只切换明暗。
+            darkTheme: _fitnessTheme(dark: true),
+            theme: _fitnessTheme(dark: box.read('mode') == 'dark'),
             // 1. call BotToastInit
             builder: (context, child) {
               child = BotToastInit()(context, child ?? Container());
@@ -113,4 +93,81 @@ class _FreeFitnessAppState extends State<FreeFitnessApp> {
       ),
     );
   }
+}
+
+/// 陶土色主题：浅底暖纸，主色是深陶土，深色模式用同一套颜色压暗。
+ThemeData _fitnessTheme({required bool dark}) {
+  const lightPrimary = Color(0xFF8C4032);
+  const darkPrimary = Color(0xFFE7B2A4);
+  final colors = dark
+      ? const FlexSchemeColor(
+          primary: darkPrimary,
+          primaryContainer: Color(0xFF5C2E26),
+          secondary: Color(0xFFD7C4B8),
+          secondaryContainer: Color(0xFF3A2C28),
+          tertiary: Color(0xFFE2C089),
+        )
+      : const FlexSchemeColor(
+          primary: lightPrimary,
+          primaryContainer: Color(0xFFF4D7CE),
+          secondary: Color(0xFF3E4A5C),
+          secondaryContainer: Color(0xFFD9E0EA),
+          tertiary: Color(0xFFC48A3A),
+        );
+  final base = dark
+      ? FlexThemeData.dark(colors: colors, useMaterial3: false)
+      : FlexThemeData.light(colors: colors, useMaterial3: false);
+  final primary = dark ? darkPrimary : lightPrimary;
+  final bar = dark ? const Color(0xFF241C19) : Colors.white;
+  final canvas = dark ? const Color(0xFF161311) : const Color(0xFFF7F2EC);
+  final appBar = dark ? const Color(0xFF2C211E) : lightPrimary;
+
+  return base.copyWith(
+    scaffoldBackgroundColor: canvas,
+    appBarTheme: AppBarTheme(
+      elevation: 0,
+      scrolledUnderElevation: 0,
+      backgroundColor: appBar,
+      foregroundColor: Colors.white,
+      iconTheme: const IconThemeData(color: Colors.white),
+      actionsIconTheme: const IconThemeData(color: Colors.white),
+      titleTextStyle: const TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0.2,
+      ),
+    ),
+    cardTheme: CardThemeData(
+      color: bar,
+      elevation: 0,
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: lightPrimary,
+      foregroundColor: Colors.white,
+      elevation: 2,
+      highlightElevation: 4,
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: bar,
+      selectedItemColor: primary,
+      unselectedItemColor: dark
+          ? const Color(0xFFB3A69C)
+          : const Color(0xFF8E847C),
+      selectedLabelStyle: const TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w600,
+      ),
+      unselectedLabelStyle: const TextStyle(fontSize: 11),
+      type: BottomNavigationBarType.fixed,
+      elevation: 8,
+    ),
+    dividerTheme: DividerThemeData(
+      color: dark ? const Color(0xFF3A302C) : const Color(0xFFE8DFD6),
+      thickness: 1,
+      space: 1,
+    ),
+  );
 }

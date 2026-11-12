@@ -93,55 +93,94 @@ class CusCoverCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      clipBehavior: Clip.hardEdge,
-      elevation: 2.sp,
-      child: InkWell(
-        onTap: () async {
-          bool isGranted = await requestStoragePermission();
+    final primary = Theme.of(context).colorScheme.primary;
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 5.h),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(18.r),
+          boxShadow: [
+            BoxShadow(
+              color: primary.withValues(alpha: 0.08),
+              blurRadius: 16,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Card(
+          clipBehavior: Clip.antiAlias,
+          elevation: 0,
+          child: InkWell(
+            onTap: () async {
+              bool isGranted = await requestStoragePermission();
 
-          if (!context.mounted) return;
-          if (!isGranted) {
-            commonExceptionDialog(
-              context,
-              CusAL.of(context).exceptionWarningTitle,
-              "无存储授权",
-            );
-          }
+              if (!context.mounted) return;
+              if (!isGranted) {
+                commonExceptionDialog(
+                  context,
+                  CusAL.of(context).exceptionWarningTitle,
+                  "无存储授权",
+                );
+              }
 
-          if (routeName != null) {
-            Navigator.pushNamed(context, routeName!);
-          } else {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (BuildContext ctx) => targetPage),
-            );
-          }
-        },
-        child: Center(
-          child: Row(
-            children: [
-              Expanded(
-                flex: 2,
-                child: Padding(
-                  padding: EdgeInsets.all(5.sp),
-                  child: Image.asset(imageUrl, fit: BoxFit.scaleDown),
+              if (routeName != null) {
+                Navigator.pushNamed(context, routeName!);
+              } else {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (BuildContext ctx) => targetPage),
+                );
+              }
+            },
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(
+                  width: 112.w,
+                  child: Image.asset(imageUrl, fit: BoxFit.cover),
                 ),
-              ),
-              Expanded(
-                flex: 3,
-                child: ListTile(
-                  title: Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).primaryColor,
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(14.w, 12.h, 8.w, 12.h),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w700,
+                            color: primary,
+                            height: 1.2,
+                          ),
+                        ),
+                        SizedBox(height: 6.h),
+                        Text(
+                          subtitle,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            height: 1.35,
+                            color: Theme.of(context).textTheme.bodySmall?.color
+                                ?.withValues(alpha: 0.9),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  subtitle: Text(subtitle),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: EdgeInsets.only(right: 8.w),
+                  child: Icon(
+                    Icons.chevron_right_rounded,
+                    color: primary.withValues(alpha: 0.7),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
