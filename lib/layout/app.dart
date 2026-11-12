@@ -73,20 +73,9 @@ class _FreeFitnessAppState extends State<FreeFitnessApp> {
             //   ),
             // ),
 
-            // 跟随系统时浅色用绿色、深色用同一套绿色；手动深色仍用原有红色方案。
-            darkTheme: _fitnessTheme(
-              dark: true,
-              scheme: box.read('mode') == 'dark'
-                  ? FlexScheme.mandyRed
-                  : FlexScheme.greenM3,
-            ),
-
-            /// 卡片、顶栏和底栏的圆角与留白在 _fitnessTheme 里统一收过。
-            theme: box.read('mode') == 'dark'
-                ? _fitnessTheme(dark: true, scheme: FlexScheme.mandyRed)
-                : box.read('mode') == 'light'
-                ? _fitnessTheme(dark: false, scheme: FlexScheme.aquaBlue)
-                : _fitnessTheme(dark: false, scheme: FlexScheme.greenM3),
+            // 浅色是陶土色，深色是同一套颜色的夜间版。手动深浅只切换明暗。
+            darkTheme: _fitnessTheme(dark: true),
+            theme: _fitnessTheme(dark: box.read('mode') == 'dark'),
             // 1. call BotToastInit
             builder: (context, child) {
               child = BotToastInit()(context, child ?? Container());
@@ -106,21 +95,39 @@ class _FreeFitnessAppState extends State<FreeFitnessApp> {
   }
 }
 
-/// 在现有 Flex 配色上收一版界面：浅底、无阴影顶栏、圆角卡片。
-ThemeData _fitnessTheme({required bool dark, required FlexScheme scheme}) {
+/// 陶土色主题：浅底暖纸，主色是深陶土，深色模式用同一套颜色压暗。
+ThemeData _fitnessTheme({required bool dark}) {
+  const lightPrimary = Color(0xFF8C4032);
+  const darkPrimary = Color(0xFFE7B2A4);
+  final colors = dark
+      ? const FlexSchemeColor(
+          primary: darkPrimary,
+          primaryContainer: Color(0xFF5C2E26),
+          secondary: Color(0xFFD7C4B8),
+          secondaryContainer: Color(0xFF3A2C28),
+          tertiary: Color(0xFFE2C089),
+        )
+      : const FlexSchemeColor(
+          primary: lightPrimary,
+          primaryContainer: Color(0xFFF4D7CE),
+          secondary: Color(0xFF3E4A5C),
+          secondaryContainer: Color(0xFFD9E0EA),
+          tertiary: Color(0xFFC48A3A),
+        );
   final base = dark
-      ? FlexThemeData.dark(scheme: scheme, useMaterial3: false)
-      : FlexThemeData.light(scheme: scheme, useMaterial3: false);
-  final primary = base.colorScheme.primary;
-  final bar = dark ? const Color(0xFF1A2420) : Colors.white;
-  final canvas = dark ? const Color(0xFF101614) : const Color(0xFFF3F6F4);
+      ? FlexThemeData.dark(colors: colors, useMaterial3: false)
+      : FlexThemeData.light(colors: colors, useMaterial3: false);
+  final primary = dark ? darkPrimary : lightPrimary;
+  final bar = dark ? const Color(0xFF241C19) : Colors.white;
+  final canvas = dark ? const Color(0xFF161311) : const Color(0xFFF7F2EC);
+  final appBar = dark ? const Color(0xFF2C211E) : lightPrimary;
 
   return base.copyWith(
     scaffoldBackgroundColor: canvas,
     appBarTheme: AppBarTheme(
       elevation: 0,
       scrolledUnderElevation: 0,
-      backgroundColor: primary,
+      backgroundColor: appBar,
       foregroundColor: Colors.white,
       iconTheme: const IconThemeData(color: Colors.white),
       actionsIconTheme: const IconThemeData(color: Colors.white),
@@ -138,7 +145,7 @@ ThemeData _fitnessTheme({required bool dark, required FlexScheme scheme}) {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: primary,
+      backgroundColor: lightPrimary,
       foregroundColor: Colors.white,
       elevation: 2,
       highlightElevation: 4,
@@ -147,8 +154,8 @@ ThemeData _fitnessTheme({required bool dark, required FlexScheme scheme}) {
       backgroundColor: bar,
       selectedItemColor: primary,
       unselectedItemColor: dark
-          ? const Color(0xFF9AA59E)
-          : const Color(0xFF8A938C),
+          ? const Color(0xFFB3A69C)
+          : const Color(0xFF8E847C),
       selectedLabelStyle: const TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w600,
@@ -158,7 +165,7 @@ ThemeData _fitnessTheme({required bool dark, required FlexScheme scheme}) {
       elevation: 8,
     ),
     dividerTheme: DividerThemeData(
-      color: dark ? const Color(0xFF2A3330) : const Color(0xFFE3EAE4),
+      color: dark ? const Color(0xFF3A302C) : const Color(0xFFE8DFD6),
       thickness: 1,
       space: 1,
     ),

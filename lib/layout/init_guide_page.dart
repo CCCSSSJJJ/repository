@@ -207,7 +207,7 @@ class _InitGuidePageState extends State<InitGuidePage> {
           style: TextStyle(
             fontSize: 22.sp,
             fontWeight: FontWeight.bold,
-            color: Colors.green,
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
         SizedBox(height: 24.sp),
@@ -279,7 +279,7 @@ class _InitGuidePageState extends State<InitGuidePage> {
                 Icon(
                   Icons.check_circle_outline,
                   size: 18.sp,
-                  color: Colors.green,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
                 SizedBox(width: 8.sp),
                 Expanded(
@@ -297,7 +297,9 @@ class _InitGuidePageState extends State<InitGuidePage> {
                 : _l10n.guideStorageSkippable,
             style: TextStyle(
               fontSize: 12.sp,
-              color: _storageGranted ? Colors.green : Colors.grey,
+              color: _storageGranted
+                  ? Theme.of(context).colorScheme.primary
+                  : Colors.grey,
             ),
           ),
         ),
