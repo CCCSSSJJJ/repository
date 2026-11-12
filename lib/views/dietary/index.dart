@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../core/widgets/cus_cards.dart';
 import '../../core/constants/constants.dart';
@@ -22,42 +23,45 @@ class _DietaryState extends State<Dietary> {
       // 避免搜索时弹出键盘，让底部的minibar位置移动到tab顶部导致溢出的问题
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text(CusAL.of(context).dietary)),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: CusCoverCard(
-              targetPage: const DietaryReports(),
-              title: CusAL.of(context).dietaryReports,
-              subtitle: CusAL.of(context).dietaryReportsSubtitle,
-              imageUrl: reportImageUrl,
+      body: Padding(
+        padding: EdgeInsets.fromLTRB(12.w, 8.h, 12.w, 76.h),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: CusCoverCard(
+                targetPage: const DietaryReports(),
+                title: CusAL.of(context).dietaryReports,
+                subtitle: CusAL.of(context).dietaryReportsSubtitle,
+                imageUrl: reportImageUrl,
+              ),
             ),
-          ),
-          Expanded(
-            child: CusCoverCard(
-              targetPage: const DietaryFoods(),
-              title: CusAL.of(context).foodCompo,
-              subtitle: CusAL.of(context).foodCompoSubtitle,
-              imageUrl: dietaryNutritionImageUrl,
+            Expanded(
+              child: CusCoverCard(
+                targetPage: const DietaryFoods(),
+                title: CusAL.of(context).foodCompo,
+                subtitle: CusAL.of(context).foodCompoSubtitle,
+                imageUrl: dietaryNutritionImageUrl,
+              ),
             ),
-          ),
-          Expanded(
-            child: CusCoverCard(
-              targetPage: const MealPhotoGallery(),
-              title: CusAL.of(context).mealGallery,
-              subtitle: CusAL.of(context).mealGallerySubtitle,
-              imageUrl: dietaryMealImageUrl,
+            Expanded(
+              child: CusCoverCard(
+                targetPage: const MealPhotoGallery(),
+                title: CusAL.of(context).mealGallery,
+                subtitle: CusAL.of(context).mealGallerySubtitle,
+                imageUrl: dietaryMealImageUrl,
+              ),
             ),
-          ),
-          Expanded(
-            child: CusCoverCard(
-              targetPage: const DietaryRecords(),
-              title: CusAL.of(context).dietaryRecords,
-              subtitle: CusAL.of(context).dietaryRecordsSubtitle,
-              imageUrl: dietaryLogCoverImageUrl,
+            Expanded(
+              child: CusCoverCard(
+                targetPage: const DietaryRecords(),
+                title: CusAL.of(context).dietaryRecords,
+                subtitle: CusAL.of(context).dietaryRecordsSubtitle,
+                imageUrl: dietaryLogCoverImageUrl,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

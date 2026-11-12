@@ -148,7 +148,7 @@ class _HomePageState extends State<HomePage> {
         floatingActionButton: FloatingActionButton(
           onPressed: _openAiAssistant,
           tooltip: box.read('language') == 'en' ? "AI Assistant" : "AI 助手",
-          child: const Icon(Icons.smart_toy),
+          child: const Icon(Icons.smart_toy_outlined),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
 
@@ -156,6 +156,7 @@ class _HomePageState extends State<HomePage> {
           // 当item数量小于等于3时会默认fixed模式下使用主题色，大于3时则会默认shifting模式下使用白色。
           // 为了使用主题色，这里手动设置为fixed
           type: BottomNavigationBarType.fixed,
+          elevation: 12,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: const Icon(Icons.fitness_center),

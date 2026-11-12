@@ -73,29 +73,20 @@ class _FreeFitnessAppState extends State<FreeFitnessApp> {
             //   ),
             // ),
 
-            // 默认使用浅色主题，预设一个深色主题使用的预设值
-            // 跟随系统的默认深色是一个material主题
-            darkTheme: FlexThemeData.dark(scheme: FlexScheme.material),
+            // 跟随系统时浅色用绿色、深色用同一套绿色；手动深色仍用原有红色方案。
+            darkTheme: _fitnessTheme(
+              dark: true,
+              scheme: box.read('mode') == 'dark'
+                  ? FlexScheme.mandyRed
+                  : FlexScheme.greenM3,
+            ),
 
-            /// 根据系统设置使用深色或浅色主题(当有完善的深色模式之后再启用)
-            /// 默认的主题(即theme:null)不是很好看，就只要不是暗色都浅色主题，
-            /// 跟随系统的浅色和深色和手动选择的一样
-            theme: box.read('mode') == 'system'
-                // 跟随系统的默认浅色是一个绿色主题
-                ? FlexThemeData.light(
-                    scheme: FlexScheme.greenM3,
-                    // 2024-11-11 flutter更新到3.24.4、对应插件更新到最新版本时，不添加这个为false效果和之前不一样了
-                    useMaterial3: false,
-                  )
-                : box.read('mode') == 'dark'
-                ? FlexThemeData.dark(
-                    scheme: FlexScheme.mandyRed,
-                    useMaterial3: false,
-                  )
-                : FlexThemeData.light(
-                    scheme: FlexScheme.aquaBlue,
-                    useMaterial3: false,
-                  ),
+            /// 卡片、顶栏和底栏的圆角与留白在 _fitnessTheme 里统一收过。
+            theme: box.read('mode') == 'dark'
+                ? _fitnessTheme(dark: true, scheme: FlexScheme.mandyRed)
+                : box.read('mode') == 'light'
+                ? _fitnessTheme(dark: false, scheme: FlexScheme.aquaBlue)
+                : _fitnessTheme(dark: false, scheme: FlexScheme.greenM3),
             // 1. call BotToastInit
             builder: (context, child) {
               child = BotToastInit()(context, child ?? Container());
@@ -113,4 +104,63 @@ class _FreeFitnessAppState extends State<FreeFitnessApp> {
       ),
     );
   }
+}
+
+/// 在现有 Flex 配色上收一版界面：浅底、无阴影顶栏、圆角卡片。
+ThemeData _fitnessTheme({required bool dark, required FlexScheme scheme}) {
+  final base = dark
+      ? FlexThemeData.dark(scheme: scheme, useMaterial3: false)
+      : FlexThemeData.light(scheme: scheme, useMaterial3: false);
+  final primary = base.colorScheme.primary;
+  final bar = dark ? const Color(0xFF1A2420) : Colors.white;
+  final canvas = dark ? const Color(0xFF101614) : const Color(0xFFF3F6F4);
+
+  return base.copyWith(
+    scaffoldBackgroundColor: canvas,
+    appBarTheme: AppBarTheme(
+      elevation: 0,
+      scrolledUnderElevation: 0,
+      backgroundColor: primary,
+      foregroundColor: Colors.white,
+      iconTheme: const IconThemeData(color: Colors.white),
+      actionsIconTheme: const IconThemeData(color: Colors.white),
+      titleTextStyle: const TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0.2,
+      ),
+    ),
+    cardTheme: CardThemeData(
+      color: bar,
+      elevation: 0,
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: primary,
+      foregroundColor: Colors.white,
+      elevation: 2,
+      highlightElevation: 4,
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: bar,
+      selectedItemColor: primary,
+      unselectedItemColor: dark
+          ? const Color(0xFF9AA59E)
+          : const Color(0xFF8A938C),
+      selectedLabelStyle: const TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w600,
+      ),
+      unselectedLabelStyle: const TextStyle(fontSize: 11),
+      type: BottomNavigationBarType.fixed,
+      elevation: 8,
+    ),
+    dividerTheme: DividerThemeData(
+      color: dark ? const Color(0xFF2A3330) : const Color(0xFFE3EAE4),
+      thickness: 1,
+      space: 1,
+    ),
+  );
 }

@@ -183,24 +183,27 @@ class _DiaryTableCalendarState extends State<DiaryTableCalendar> {
       // 异步获取全部的手记数据，以便自定义事件时展示每日有多少的手记数量
       body: isLoading
           ? buildLoader(isLoading)
-          : Column(
-              children: [
-                /// 表格日历的一些配置
-                _buildDiaryCalender(),
+          : Padding(
+              padding: EdgeInsets.only(bottom: 72.h),
+              child: Column(
+                children: [
+                  /// 表格日历的一些配置
+                  _buildDiaryCalender(),
 
-                Divider(thickness: 5.sp, height: 8.sp),
+                  Divider(thickness: 1, height: 1),
 
-                /// 日历某些操作改变后，显示对应的手记内容列表
-                Expanded(
-                  child: ValueListenableBuilder<List<Diary>>(
-                    valueListenable: _selectedEvents,
-                    // 当_selectedEvents有变化时，这个builder才会被调用
-                    builder: (context, value, _) {
-                      return _buildDiaryList(value);
-                    },
+                  /// 日历某些操作改变后，显示对应的手记内容列表
+                  Expanded(
+                    child: ValueListenableBuilder<List<Diary>>(
+                      valueListenable: _selectedEvents,
+                      // 当_selectedEvents有变化时，这个builder才会被调用
+                      builder: (context, value, _) {
+                        return _buildDiaryList(value);
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
     );
   }
